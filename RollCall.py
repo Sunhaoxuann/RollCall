@@ -6,6 +6,7 @@ import os
 import pyttsx3
 from time import sleep
 import threading
+import base64
 
 def mode1windows(screen):  # 主窗口基本布局
     screen.fill((240, 240, 240))
@@ -25,12 +26,22 @@ def textshow(text, rgb=(0, 0, 0), siz=72, ttf='华文楷体'):  # 渲染文字
     font = pg.font.SysFont(ttf, siz)
     text = font.render(text, True, rgb)
     return text
+def encodeing(text):
+    btext = text.encode('utf-8')
+    coding = base64.b64encode(btext)
+    return coding
+def decoding(coding):
+    btext = base64.b64decode(coding)
+    text = btext.decode('utf-8')
+    return text
+def readnamelist(file):
+    with open(file, 'r') as f:
+        namelist = f.read()
+    namelist = decoding(namelist)
+    return eval(namelist)
 
 mode = 'main'
 showtext_mainwindows = '随机点名'
-namelist = ['叶杨阳', '肖逸凡', '王沐恩', '黄皓轩', '项涵哲', '邹帆', '闻张依', '翁睿毅', '李御轩', '张峰铭', '韦思桐', '沈凯昕', '林浩', '吴珈栩', '袁晓晴', '于妙盈', '俞昭阳', '申屠绍越', '姚智宇', '陶奕畅',
-            '孙昊轩', '高智杰', '严天浩', '李嘉怡', '何相南', '黄圣曦', '周炜昊', '吴文萱', '李乐山', '殷一铭', '蒋一凡', '孙周哲翊', '沈雨涵', '程天宇', '郑杰', '蒋哲聪', '徐书亚', '林馨雯', '方浩如', '刘翔',
-            '边峻熙', '叶俊浩', '张可维', '李宏振', '高浩哲', '产洲俊', '王博辉', '陈沈捷']
 rolltime = 20
 ifread = False
 color = (0, 0, 0)
@@ -39,6 +50,7 @@ ifchoice = False
 times = 0
 rollspeed = 20  # 每秒
 thread = None
+namelist = readnamelist('namelist.bin')
 
 pg.init()  # 初始化
 windows = pg.display.set_mode((385, 141))
