@@ -19,7 +19,6 @@ def mode2windows(screen): # 设置窗口基本布局
 
 def mode3windows(screen): # 登录窗口基本布局
     screen.fill((240, 240, 240))
-    pg.draw.rect(screen, (255,255,255), (29,99,47,22))
     screen.blit(textshow('请输入密码', black, 20), (25, 15))
     screen.blit(textshow('_ _ _ _ _ _', black, 20), (33, 60))
     screen.blit(textshow('1', black, 30), (210,14))
@@ -40,7 +39,24 @@ def mode3windows(screen): # 登录窗口基本布局
     # pg.draw.rect(screen, (225, 225, 225), (25, 50, 335, 25), 0)
     # pg.draw.rect(screen, (220, 220, 220), (290, 90, 70, 25), 0)
     
-    
+def mode3windows2(screen): # 登录窗口基本布局2
+    screen.fill((240, 240, 240))
+    screen.blit(textshow('请输入密码', black, 20), (25, 15))
+    screen.blit(textshow('_ _ _ _ _ _', black, 20), (33, 60))
+    screen.blit(textshow('1', black, 30), (210,14))
+    screen.blit(textshow('4', black, 30), (210,54))
+    screen.blit(textshow('7', black, 30), (210,94))
+    screen.blit(textshow('2', black, 30), (250,14))
+    screen.blit(textshow('5', black, 30), (250,54))
+    screen.blit(textshow('8', black, 30), (250,94))
+    screen.blit(textshow('3', black, 30), (290,14))
+    screen.blit(textshow('6', black, 30), (290,54))
+    screen.blit(textshow('9', black, 30), (290,94))
+    screen.blit(textshow('0', black, 30), (330,54))
+    screen.blit(textshow('确定', (113, 96, 232), 20), (320, 100))
+    screen.blit(textshow('删除', (113, 96, 232), 20), (320, 20))
+    screen.blit(textshow('←返回', (113, 96, 232), 15), (30, 100))
+
 
 def langdu(text): # 朗读函数
     engine = pyttsx3.init()
@@ -70,11 +86,16 @@ def readbinfile(file): # 读取文件函数
     password = decoding(password)
     return eval(namelist), password
 
+def _var(vars):
+    print(f"value:{vars}, type:{type(vars)}, len:{len(vars)}")
+
 class nothing(object):
     def type(self):
         return None
 
 # 设定基本参数
+showpassword = ''
+mod = 1
 mode = 'main'
 showtext_mainwindows = '随机点名'
 rolltime = 20
@@ -85,8 +106,7 @@ ifchoice = False
 times = 0
 rollspeed = 20  # 每秒
 thread = None
-namelist, password = readbinfile('config.bin')
-tempstr = ""
+namelist, password = readbinfile('.\\PythonProgram\\RollCall\\config.bin')
 n = 0
 
 pg.init()  # 初始化
@@ -145,6 +165,7 @@ while True:
                 ifread = False
 
     elif mode == 'login':
+        tempstr = ""
         while True:
             # 运算
 
@@ -156,38 +177,93 @@ while True:
                 if event.type == pg.QUIT:
                     os._exit(0)
                     
-            # 点击判断        
+            # 点击判断     
+
+            if not ifclick:
+                if times >= 10: # 防止点击过快
+                    ifclick = True
+                    times = 0
+                times += 1
+
             if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
-                print("debug:",event.pos)
+                
                 if event.pos[0] in range(29, 76) and event.pos[1] in range(99, 121): 
                    mode = 'main'
                    event = nothing()
                    break
                 
                 if ifclick:
+                    mod = 1
                     if event.pos[0] in range(196, 236) and event.pos[1] in range(14, 54):
                         tempstr += "1"
+                        ifclick = False
                     if event.pos[0] in range(236, 276) and event.pos[1] in range(14, 54):
-                        print("2")
+                        tempstr += "2"
+                        ifclick = False
                     if event.pos[0] in range(276, 316) and event.pos[1] in range(14, 54):
-                        print("3")
+                        tempstr += "3"
+                        ifclick = False
                     if event.pos[0] in range(196, 236) and event.pos[1] in range(54, 94):
-                        print("4")
+                        tempstr += "4"
+                        ifclick = False
                     if event.pos[0] in range(236, 276) and event.pos[1] in range(54, 94):
-                        print("5")
+                        tempstr += "5"
+                        ifclick = False
                     if event.pos[0] in range(276, 316) and event.pos[1] in range(54, 94):
-                        print("6")
+                        tempstr += "6"
+                        ifclick = False
                     if event.pos[0] in range(196, 236) and event.pos[1] in range(94, 134):
-                        print("7")
+                        tempstr += "7"
+                        ifclick = False
                     if event.pos[0] in range(236, 276) and event.pos[1] in range(94, 134):
-                        print("8")
+                        tempstr += "8"
+                        ifclick = False
                     if event.pos[0] in range(276, 316) and event.pos[1] in range(94, 134):
-                        print("9")
+                        tempstr += "9"
+                        ifclick = False
                     if event.pos[0] in range(316, 356) and event.pos[1] in range(54, 94):
-                        print("0")
+                        tempstr += "0"
+                        ifclick = False
+                    if event.pos[0] in range(316, 371) and event.pos[1] in range(14, 54):
+                        tempstr = tempstr[:-1]
+                        ifclick = False # 删除按键
+
+                    if len(tempstr) >= 6:
+                        tempstr = tempstr[:6]
+
+                    if len(tempstr) == 6 or (event.pos[0] in range(316, 371) and event.pos[1] in range(94, 134)):
+                        if tempstr == password:
+                            mode = 'setting'
+                            mod = 3
+                        else:
+                            mod = 2
+                            tempstr = ""
+                            event = nothing()
+
+            showpassword = ""
+            for i in tempstr:
+                showpassword += i
+                showpassword += " "
 
             # 渲染
-            mode3windows(windows)
+            if mod == 1:
+                mode3windows(windows)
+            elif mod == 2:
+                mode3windows(windows)
+                pg.draw.rect(windows, (225, 0, 0), (0, 0, 385, 20), 0)
+                windows.blit(textshow('密码错误', (255, 255, 255), 15), (25, 0))
+            elif mod == 3:
+                _var(showpassword)
+                mode3windows(windows)
+                pg.draw.rect(windows, (0, 150, 0), (0, 0, 385, 20), 0)
+                windows.blit(textshow('密码正确', (255, 255, 255), 15), (25, 0))
+                windows.blit(textshow(showpassword, black, 21), (33, 60))
+                pg.display.update()
+                sleep(1)
+                break
+            
+            windows.blit(textshow(showpassword, black, 21), (33, 60))
+
             pg.display.update()
 
     elif mode == 'setting':
