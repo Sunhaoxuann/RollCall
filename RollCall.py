@@ -112,11 +112,11 @@ pg.display.set_caption('RollCall')
 while True:
 
     
-    #debug!!!---------------------------------------------------------------------------------------------------
+    #debug!!!-----------------------------------------------------------------------------------------------------
     #-------------------------------------------------------------------------------------------------------------
     #-------------------------------------------------------------------------------------------------------------
     #-------------------------------------------------------------------------------------------------------------
-    mode = 'setting'
+    mode = 'main'
 
     if mode == 'main':
         while True:
@@ -146,7 +146,7 @@ while True:
                     ifclick == False
             
             # 显示文字处理 
-            if ifchoice == True:
+            if ifchoice:
                 times += 1
                 if times == rolltime:
                     ifchoice = False
@@ -159,6 +159,7 @@ while True:
             # 渲染
             mode1windows(windows)
             windows.blit(textshow(showtext_mainwindows, black), (46 + (4 - len(showtext_mainwindows)) * 73.25 / 2, 25))
+            pg.draw.rect(windows, black, (320,116,65,25), 1)
             pg.display.update()
             
             # 声音渲染
@@ -283,9 +284,10 @@ while True:
             if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
                 
                 if event.pos[0] in range(29, 76) and event.pos[1] in range(99, 121): 
-                   mode = 'main'
-                   event = nothing()
-                   break
+                    print('返回')
+                    mode = 'main'
+                    event = nothing()
+                    break
 
 
              # 渲染
@@ -302,71 +304,71 @@ while True:
             pg.display.update()
             
 # HISTORY CODE
-''' 
-while True:
-    events = pg.event.get()  # 获取事件
-
-    for event in events + [nothing]:  # 判断退出
-        if event.type == pg.QUIT:
-            pg.quit()
-            os._exit(0)
-
-        else:
-
-            if mode == 'main':  # 进入主窗口
-                if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
-                    if event.pos[0] >= 351 and event.pos[1] <= 25:
-                        mode = 'login'
-                    elif event.type == pg.MOUSEBUTTONDOWN and event.button == 1 and ifclick == True:
-                        ifchoice = True
-
-            elif mode == 'login':  # 进入登录窗口
-                if event.type == pg.MOUSEBUTTONDOWN and event.button == 1: # 鼠标点击检测
-                    if event.pos[0] in range(25, 72) and event.pos[1] in range(90, 112): # 返回按钮
-                        homewindows(windows)
-                        mode = 'main'
-                        event = nothing()
-                        continue
-            
-                    if event.pos[0] in range(25, 360) and event.pos[1] in range(50, 75): # 输入框激活判断
-                        active = True
-                    else:
-                        active = False
-                
-                if active:
-                    ...
-                    # if event.type == pg.KEYDOWN:  # 键盘按下
-                    #     if events.key == pg.K_BACKSPACE:  # 删除
-                    #         logging.info("delete")
-                    #     elif events.key == pg.K_RETURN:  # 确认
-                    #         logging.info("enter")
-                    #     elif events.key == pg.K_0:
-                    #         logging.info("0")
-
-                mode3windows(windows)
-
-            elif mode == 'setting':  # 进入设置窗口
-                mode2windows(windows)
-
-            if ifchoice == True:
-                times += 1
-                mode1windows(windows)
-                showtext_mainwindows = random.choice(namelist)
-                windows.blit(textshow(showtext_mainwindows, black), (46 + (4 - len(showtext_mainwindows)) * 73.25 / 2, 25))
-
-                if times == rolltime:
-                    ifread = True
-                    times = 1
-                    ifchoice = False
-                sleep(1 / rollspeed)
-
-            pg.display.update()
-
-            if ifread == True:
-                if thread is not None:
-                    thread.join()
-
-                thread = threading.Thread(target=langdu, args=(showtext_mainwindows,))
-                thread.start()
-                ifread = False
-'''
+# '''
+# while True:
+#     events = pg.event.get()  # 获取事件
+#
+#     for event in events + [nothing]:  # 判断退出
+#         if event.type == pg.QUIT:
+#             pg.quit()
+#             os._exit(0)
+#
+#         else:
+#
+#             if mode == 'main':  # 进入主窗口
+#                 if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
+#                     if event.pos[0] >= 351 and event.pos[1] <= 25:
+#                         mode = 'login'
+#                     elif event.type == pg.MOUSEBUTTONDOWN and event.button == 1 and ifclick == True:
+#                         ifchoice = True
+#
+#             elif mode == 'login':  # 进入登录窗口
+#                 if event.type == pg.MOUSEBUTTONDOWN and event.button == 1: # 鼠标点击检测
+#                     if event.pos[0] in range(25, 72) and event.pos[1] in range(90, 112): # 返回按钮
+#                         homewindows(windows)
+#                         mode = 'main'
+#                         event = nothing()
+#                         continue
+#
+#                     if event.pos[0] in range(25, 360) and event.pos[1] in range(50, 75): # 输入框激活判断
+#                         active = True
+#                     else:
+#                         active = False
+#
+#                 if active:
+#                     ...
+#                     # if event.type == pg.KEYDOWN:  # 键盘按下
+#                     #     if events.key == pg.K_BACKSPACE:  # 删除
+#                     #         logging.info("delete")
+#                     #     elif events.key == pg.K_RETURN:  # 确认
+#                     #         logging.info("enter")
+#                     #     elif events.key == pg.K_0:
+#                     #         logging.info("0")
+#
+#                 mode3windows(windows)
+#
+#             elif mode == 'setting':  # 进入设置窗口
+#                 mode2windows(windows)
+#
+#             if ifchoice == True:
+#                 times += 1
+#                 mode1windows(windows)
+#                 showtext_mainwindows = random.choice(namelist)
+#                 windows.blit(textshow(showtext_mainwindows, black), (46 + (4 - len(showtext_mainwindows)) * 73.25 / 2, 25))
+#
+#                 if times == rolltime:
+#                     ifread = True
+#                     times = 1
+#                     ifchoice = False
+#                 sleep(1 / rollspeed)
+#
+#             pg.display.update()
+#
+#             if ifread == True:
+#                 if thread is not None:
+#                     thread.join()
+#
+#                 thread = threading.Thread(target=langdu, args=(showtext_mainwindows,))
+#                 thread.start()
+#                 ifread = False
+# '''
